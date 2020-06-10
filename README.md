@@ -29,4 +29,6 @@ en función de coordenadas espaciales (mapas bidimensionales).
 
 6) Comparación entre regiones.
 
+##TO DO:
+
 -[ ]Density
