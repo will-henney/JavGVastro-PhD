@@ -18,7 +18,9 @@ en función de coordenadas espaciales (mapas bidimensionales).
 3) Algoritmos en el ambiente de jupyter (python) de las siguientes funciones estadisticas:
 
 -Función de estrcutura de segundo orden: sin normalizar/normalizada/pesada/considerando una propiedad pesada.
+
 -Función de auto correlación.
+
 -1DPSD.
 
 4) Implementación de los algoritmos mediante el paquete SaBRe.
