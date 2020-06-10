@@ -1,7 +1,7 @@
 # PhD
 PhD Stuff
 
-En este repositorio se encuentra la metodología utilizada en el trabajo de doctorado 'Turbulencia en el medio interestelar' de la ESFM IPN.
+En este repositorio se encuentra la metodología utilizada en el trabajo de doctorado **'Turbulencia en el medio interestelar'** de la ESFM IPN.
 
 Los siguientes archvios se encuentran almacenados:
 
@@ -17,13 +17,13 @@ en función de coordenadas espaciales (mapas bidimensionales).
 
 3) Algoritmos en el ambiente de jupyter (python) de las siguientes funciones estadisticas:
 
--Función de estrcutura de segundo orden: sin normalizar/normalizada/pesada/considerando una propiedad pesada.
+-**Función de estrcutura de segundo orden**: sin normalizar/normalizada/pesada/considerando una propiedad pesada.
 
--Función de auto correlación.
+-**Función de auto correlación.
 
--1DPSD.
+-**1DPSD.
 
-4) Implementación de los algoritmos mediante el paquete SaBRe.
+4) Implementación de los algoritmos mediante el paquete **SaBRe**.
 
 5) Resultados de las funciones estadisticas para las diferentes líneas de emisión de cada region.
 
