@@ -1,9 +1,10 @@
 # PhD
 PhD Stuff
 
-En este repositorio se encuentra la metodología utilizada en el trabajo de doctorado 'Turbulencia en el medio interestelar'.
+En este repositorio se encuentra la metodología utilizada en el trabajo de doctorado 'Turbulencia en el medio interestelar' de la ESFM IPN.
 
-Se encunetran almacenadas las 
+Los siguientes archvios se encuentran almacenados:
+
 1) Observaciones astronómicas (espectros de emisión para lineas de Halfa, [NII], [SII] y [OIII]) previamente reducidas de las regiones HII gigantes, NGC 604 y NGC 595.
 
 2) Tratamiento y proceso de las observaciones para la obtención de valores confiables de: 
@@ -15,8 +16,8 @@ en función de coordenadas espaciales (mapas bidimensionales).
 -Función de auto correlación
 -1DPSD
 
-4) Implementación de los algoritmos mediante el programa SaBRe.
+4) Implementación de los algoritmos mediante el paquete SaBRe.
 
-5) Resultados de las funciones estadisticas para las diferentes líneas de emisión de las regiones.
+5) Resultados de las funciones estadisticas para las diferentes líneas de emisión de cada region.
 
-6) Comparación.
+6) Comparación entre regiones.
