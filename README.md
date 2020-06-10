@@ -29,4 +29,4 @@ en función de coordenadas espaciales (mapas bidimensionales).
 
 6) Comparación entre regiones.
 
--[]Density
+-[ ]Density
