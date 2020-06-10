@@ -19,9 +19,9 @@ en función de coordenadas espaciales (mapas bidimensionales).
 
 -**Función de estrcutura de segundo orden**: sin normalizar/normalizada/pesada/considerando una propiedad pesada.
 
--**Función de auto correlación.
+-**Función de auto correlación**.
 
--**1DPSD.
+-**1DPSD**.
 
 4) Implementación de los algoritmos mediante el paquete **SaBRe**.
 
