@@ -39,5 +39,5 @@ en función de coordenadas espaciales (mapas bidimensionales).
 
 ## TO DO:
  
--[ ] Density
+-[ ] Density \
 -[ ] Line Splitting
