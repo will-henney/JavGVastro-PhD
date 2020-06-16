@@ -38,6 +38,7 @@ en función de coordenadas espaciales (mapas bidimensionales).
 -*CompH.ipynb*
 
 ## TO DO:
- 
+
+-[ ] Catálogo ¿? \ 
 -[ ] Density \
 -[ ] Line Splitting
