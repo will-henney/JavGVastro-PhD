@@ -3,7 +3,7 @@ PhD Stuff
 
 En este repositorio se encuentra la metodología utilizada en el trabajo de doctorado **'Turbulencia en el medio interestelar'** de la ESFM,IPN (CDMX, México).
 
-Los siguientes archvios se encuentran almacenados:
+Los archivos almacenados son los siguientes:
 
 1) Observaciones astronómicas (espectros de emisión para lineas de Halfa, [NII], [SII] y [OIII]) previamente reducidas de las regiones HII gigantes, NGC 604 y NGC 595.
 
