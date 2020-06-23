@@ -1,7 +1,7 @@
 # PhD
 PhD Stuff
 
-En este repositorio se encuentra la metodología utilizada en el trabajo de doctorado **'Turbulencia en el medio interestelar'** de la ESFM,IPN (CDMX, México).
+En este repositorio se encuentra la metodología utilizada en el trabajo de doctorado **'Turbulencia en el medio interestelar'** de la ESFM,IPN (CDMX, México). Esta metodología consiste en el procesamiento de observaciones astronomicas previamente reducidas y la aplicación de un análisis estadísticos a las observaciones por medio de un paquete (algoritmo) creado para ese propósito.
 
 Los archivos almacenados son los siguientes:
 
