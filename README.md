@@ -25,9 +25,9 @@ en función de coordenadas espaciales (mapas bidimensionales).
 
 -**1DPSD**.
 
--*PowerSpectrum01.ipynb*: Obtencion del 1DPSD por medio de la FFT en 2D y un promedio radial del campo obtenido. Se comparan diferentes prcedimientos.
--*PowerSpectrum02.ipynb*: Comparación de diferentes métodos de obtención de la 1DPSD a diferentes ejemplos.
--*PowerSpectrum03.ipynb*: Teorema W-K.
+-*PowerSpectrum01.ipynb*: Obtencion del 1DPSD por medio de la FFT en 2D y un promedio radial del campo obtenido. Se comparan diferentes prcedimientos. \
+-*PowerSpectrum02.ipynb*: Comparación de diferentes métodos de obtención de la 1DPSD a diferentes ejemplos. \
+-*PowerSpectrum03.ipynb*: Teorema W-K. \
 
 3.1) Ajuste de diferentes polinomios (orden 0-6) a los datos para eliminar movimientos a gran escala.
 
