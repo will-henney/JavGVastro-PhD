@@ -1,9 +1,9 @@
 Statistical functions (.ipynb)
 
-Second Order Structure Function: sosf
-Normalized Second Order Structure Function: sosfn
-AutoCorrelation Fnction: acf
-Weighted Second Order Structure Function: 
+sosf: Second Order Structure Function
+acf: AutoCorrelation Function
+sosfw: Weighted Second Order Structure Function
+sosfh: Second Order Structure Function Dr. Will
 
 
 SBR (.py): Previous Functions included ready for analysis
