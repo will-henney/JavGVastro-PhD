@@ -3,3 +3,12 @@ I'm using this folder until I 'push' the results to the project repository.
 
 Files names code:
 Region (604/595) + Instrument (Isis /Taurus) + line (H,N,O,S) + sample (A,B,C)
+
+Data/
+Astronomical observations
+
+jup/
+Jupyter Files
+
+figs/
+Figures of the structure function for different samples (regions, lines, etc.)
