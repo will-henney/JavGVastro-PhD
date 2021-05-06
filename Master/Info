@@ -1,7 +1,0 @@
-Here are present the Master files, where the data of the astronomical observations (txt/fits) is transformed to data for the statiscal analysis.
-
-The ISIS instruments (long-slit spectroscopy) uses differenet arms, red (R) covering the order of 6000 angs and allowing the observation of Halpha, [NII] and [SII] 
-and blue (B) for 4000 angs for Hbeta and [OIII].
-
-The TAURUS-II instrument (Fabry-Perot) was used to observed Halpha and [OIII].
-
