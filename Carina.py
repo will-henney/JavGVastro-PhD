@@ -30,7 +30,7 @@ from astropy.table import Table
 
 plt.rcParams["font.family"]="Times New Roman"
 plt.rcParams["font.size"]="17"
-from sabreMod import sosf,sosfh
+#from sabreMod import sosf,sosfh
 # -
 
 damiani_tab1_file = "Obs/J_A+A_591_A74_table1.dat.fits"
@@ -56,6 +56,13 @@ df = df.assign(Ha_rb_ratio=np.log10(df['HaNr']/df['HaNb']))
 
 sns.pairplot(df, 
              vars=["HaRVb", "HaNb", "Hasigmab"], 
+             diag_kind='hist', hue="Ha_close", 
+             plot_kws=dict(alpha=0.2, s=10, edgecolor='none'),
+             diag_kws=dict(bins=20),
+            )
+
+sns.pairplot(df, 
+             vars=["HaRVr", "HaRVb", "Hasigmar", "Hasigmab"], 
              diag_kind='hist', hue="Ha_close", 
              plot_kws=dict(alpha=0.2, s=10, edgecolor='none'),
              diag_kws=dict(bins=20),
@@ -132,18 +139,17 @@ plt.rcParams["font.size"]="17"
 #fig.savefig('CarinaRed.pdf', bbox_inches='tight')
 
 # +
-plt.figure(figsize=(20, 4))
+plt.figure(figsize=(16, 8))
 
-plt.subplot(131)
-plt.scatter(df.HaRVb,df.Hasigmab, alpha=0.075, color='k', label='blue')
+plt.subplot(111)
+plt.scatter(df.HaRVb,df.Hasigmab, alpha=1.0, s=100*df.HaNb/df.HaNb.max(), 
+            c=df.Ha_rb_ratio, label='blue', vmin=-0.5, vmax=0.5, cmap="Blues_r")
+plt.scatter(df.HaRVr,df.Hasigmar, alpha=1.0, s=100*df.HaNr/df.HaNr.max(), 
+            c=-df.Ha_rb_ratio, label='red', vmin=-0.5, vmax=0.5, cmap="Reds_r")
 plt.xlabel('centroid velocity [km/s]')
 plt.ylabel('$σ_{LOS}$ [km/s]')
-plt.legend()
-
-plt.subplot(132)
-plt.scatter(df.HaRVr,df.Hasigmar, alpha=0.075, color='k', label='red')
-plt.xlabel('centroid velocity [km/s]')
-plt.ylabel('$σ_{LOS}$ [km/s]')
+plt.xlim(-40, 20)
+plt.ylim(10, 30)
 plt.legend()
 
 plt.show()
@@ -152,6 +158,8 @@ plt.rcParams["font.size"]="17"
 
 #fig.savefig('CarinaLOSvsPOS.pdf', bbox_inches='tight')
 # -
+
+# Conclusion: the component closer to the systemic velocity tends to be the brightest. 
 
 # Combining Components
 
@@ -184,7 +192,9 @@ fHa, vHa, sHa, gHa = combine_moments(
 
 dfHa = pd.DataFrame(
     {'log_F': np.log10(fHa), 
-     'V_mean': vHa, 
+     'V_mean': vHa,
+     "V_r": df.HaRVr,
+     "V_b": df.HaRVb,
      'sigma': sHa, 
      'skew': gHa,
      'R_B': df.Ha_rb_ratio,
@@ -198,6 +208,36 @@ dfHa = pd.DataFrame(
 dfHa.describe()
 
 # Maps
+
+sns.pairplot(dfHa, 
+             vars=["V_mean", "V_r", "V_b", "dV", "R_B"], 
+             diag_kind='hist', #hue="R_B",
+             plot_kws=dict(alpha=0.3, s=10, edgecolor='none'),
+             diag_kws=dict(bins=20),
+            )
+
+dfHa.corr()
+
+# +
+plt.figure(figsize=(10, 10))
+
+plt.subplot(111)
+plt.scatter(df.HaRVb,df.Hasigmab, alpha=1.0, s=100*df.HaNb/df.HaNb.max(), 
+            c=df.Ha_rb_ratio, vmin=-0.5, vmax=0.5, cmap="Blues_r")
+plt.scatter(df.HaRVr,df.Hasigmar, alpha=1.0, s=100*df.HaNr/df.HaNr.max(), 
+            c=-df.Ha_rb_ratio, vmin=-0.5, vmax=0.5, cmap="Reds_r")
+plt.scatter(dfHa.V_mean, dfHa.sigma, alpha=1.0, s=30*10**(dfHa.log_F - 5.0), 
+            c=dfHa.dV, vmin=20, vmax=50, cmap="Greens")
+plt.xlabel('centroid velocity [km/s]')
+plt.ylabel('$σ_{LOS}$ [km/s]')
+plt.xlim(-40, 20)
+plt.ylim(10, 32)
+plt.show()
+
+plt.rcParams["font.size"]="17"
+
+
+# -
 
 points_of_interest = {
     "eta Car": [161.26517, -59.684425],
@@ -232,7 +272,8 @@ with sns.axes_style("whitegrid"):
 with sns.axes_style("darkgrid"):
     fig, [axr, axb] = plt.subplots(1, 2, figsize=(18, 8))
     scat = axr.scatter(df.RAdeg, df.DEdeg, 
-                      s=40*(np.log10(df.HaNr/df.HaNb) + 1.3), 
+#                      s=40*(np.log10(df.HaNr/df.HaNb) + 1.3), 
+                      s=20*(df.HaNr/df.HaNb), 
                       c=df.HaRVr, cmap='RdBu_r',
                       vmin=-55, vmax=35, 
                      )
@@ -245,7 +286,8 @@ with sns.axes_style("darkgrid"):
     axr.axhline(y=-59.65, xmin=0.655, xmax=0.91, linewidth=2, color = 'k')
     
     scat = axb.scatter(df.RAdeg, df.DEdeg, 
-                      s=40*(np.log10(df.HaNb/df.HaNr) + 1.3), 
+#                      s=40*(np.log10(df.HaNb/df.HaNr) + 1.3), 
+                      s=20*(df.HaNb/df.HaNr), 
                       c=df.HaRVb, cmap='RdBu_r',
                       vmin=-55, vmax=35,
                      )
@@ -268,12 +310,43 @@ with sns.axes_style("darkgrid"):
 
 with sns.axes_style("darkgrid"):
     fig, ax = plt.subplots(figsize=(12, 12))
-    scat = ax.scatter(dfHa.RAdeg, dfHa.DEdeg, s=8*(dfHa.sigma - 12), c=dfHa.V_mean-dfHa.V_mean.mean(), cmap='RdBu_r')
+    scat = ax.scatter(dfHa.RAdeg, dfHa.DEdeg, 
+                      s=100*10**(dfHa.log_F - 5.0), 
+                      c=dfHa.V_mean-dfHa.V_mean.mean(), cmap='RdBu_r')
     mark_points(ax)
     fig.colorbar(scat, ax=ax).set_label("$V$")
     ax.invert_xaxis()
     ax.set_aspect(2)
     ax.set_title("H alpha mean velocity")
+    
+    ax.text(0.32, 0.2, '7 pc',
+        verticalalignment='bottom', horizontalalignment='right',
+        transform=ax.transAxes,
+        color='black', fontsize=20)
+    ax.axhline(y=-59.83, xmin=0.14, xmax=0.395, linewidth=2, color = 'k')
+
+with sns.axes_style("white"):
+    fig, ax = plt.subplots(figsize=(12, 12))
+    scat = ax.scatter(dfHa.RAdeg, dfHa.DEdeg, 
+                      s=150,
+                      vmin=-10, vmax=10,
+                      c=dfHa.V_mean-dfHa.V_mean.mean(), cmap='RdBu_r')
+    mark_points(ax)
+    fig.colorbar(scat, ax=ax).set_label("$V$")
+    ax.invert_xaxis()
+    ax.set_aspect(2)
+#    ax.set_title("H alpha mean velocity")
+
+with sns.axes_style("darkgrid"):
+    fig, ax = plt.subplots(figsize=(12, 12))
+    scat = ax.scatter(
+        dfHa.RAdeg, dfHa.DEdeg, 
+        s=8*(dfHa.sigma - 12), c=dfHa.dV, cmap='RdBu_r')
+    mark_points(ax)
+    fig.colorbar(scat, ax=ax).set_label("$dV$")
+    ax.invert_xaxis()
+    ax.set_aspect(2)
+    ax.set_title("H alpha Red-Blue velocity difference")
     
     ax.text(0.32, 0.2, '7 pc',
         verticalalignment='bottom', horizontalalignment='right',
@@ -315,7 +388,8 @@ pairs.loc[:, 'dV2'] = pairs.dV**2
 pairs.loc[:, 'log_dV2'] = np.log10(pairs.dV**2)
 pairs.loc[:, 'VV_mean'] = 0.5*(pairs.V + pairs.V_)
 
-pairs = pairs[(pairs.dDE > 0.0) & (pairs.dRA > 0.0)]
+pairs = pairs[(pairs.dRA > 0.0)]
+#pairs = pairs[(pairs.dDE > 0.0)]
 
 pairs.head()
 
@@ -325,13 +399,13 @@ pairs.corr()
 
 # +
 mask = (pairs.log_s > 0.0) & (pairs.log_dV2 > -3)
-ax = sns.jointplot(x='log_s', y='dV', data=pairs[mask], alpha=0.2, s=1, edgecolor='none',color="blue")
+ax = sns.jointplot(x='log_s', y='dV', data=pairs[mask], alpha=0.1, s=1, edgecolor='none',color="blue")
 
 ax.fig.set_size_inches(12, 12)
 # -
 
 mask = (pairs.log_s > 0.0) & (pairs.log_dV2 > -3)
-ax = sns.jointplot(x='log_s', y='log_dV2', data=pairs[mask], alpha=0.2, s=1, edgecolor='none',color="blue")
+ax = sns.jointplot(x='log_s', y='log_dV2', data=pairs[mask], alpha=0.1, s=1, edgecolor='none',color="blue")
 ax.fig.set_size_inches(12, 12)
 
 pairs.loc[:, 's_class'] = pd.Categorical((2*pairs.log_s + 0.5).astype('int'), ordered=True)
@@ -455,7 +529,7 @@ pairs.loc[:, 'dV2'] = pairs.dV**2
 pairs.loc[:, 'log_dV2'] = np.log10(pairs.dV**2)
 pairs.loc[:, 'VV_mean'] = 0.5*(pairs.V + pairs.V_)
 
-pairs = pairs[(pairs.dDE > 0.0) & (pairs.dRA > 0.0)]
+pairs = pairs[(pairs.dDE > 0.0)]
 
 pairs.head()
 
@@ -465,13 +539,13 @@ pairs.corr()
 
 # +
 mask = (pairs.log_s > 0.0) & (pairs.log_dV2 > -3)
-ax = sns.jointplot(x='log_s', y='dV', data=pairs[mask], alpha=0.2, s=1, edgecolor='none',color="blue")
+ax = sns.jointplot(x='log_s', y='dV', data=pairs[mask], alpha=0.1, s=1, edgecolor='none',color="blue")
 
 ax.fig.set_size_inches(12, 12)
 # -
 
 mask = (pairs.log_s > 0.0) & (pairs.log_dV2 > -3)
-ax = sns.jointplot(x='log_s', y='log_dV2', data=pairs[mask], alpha=0.2, s=1, edgecolor='none',color="blue")
+ax = sns.jointplot(x='log_s', y='log_dV2', data=pairs[mask], alpha=0.1, s=1, edgecolor='none',color="blue")
 ax.fig.set_size_inches(12, 12)
 
 pairs.loc[:, 's_class'] = pd.Categorical((2*pairs.log_s + 0.5).astype('int'), ordered=True)
@@ -613,7 +687,7 @@ pairs.loc[:, 'dV2'] = pairs.dV**2
 pairs.loc[:, 'log_dV2'] = np.log10(pairs.dV**2)
 pairs.loc[:, 'VV_mean'] = 0.5*(pairs.V + pairs.V_)
 
-pairs = pairs[(pairs.dDE > 0.0) & (pairs.dRA > 0.0)]
+pairs = pairs[(pairs.dDE > 0.0)]
 
 pairs.head()
 
@@ -622,11 +696,11 @@ pairs.describe()
 pairs.corr()
 
 mask = (pairs.log_s > 0.0) & (pairs.log_dV2 > -3)
-ax = sns.jointplot(x='log_s', y='dV', data=pairs[mask], alpha=0.2, s=1, edgecolor='none')
+ax = sns.jointplot(x='log_s', y='dV', data=pairs[mask], alpha=0.1, s=1, edgecolor='none')
 ax.fig.set_size_inches(12, 12)
 
 mask = (pairs.log_s > 0.0) & (pairs.log_dV2 > -3)
-ax = sns.jointplot(x='log_s', y='log_dV2', data=pairs[mask], alpha=0.2, s=1, edgecolor='none')
+ax = sns.jointplot(x='log_s', y='log_dV2', data=pairs[mask], alpha=0.1, s=1, edgecolor='none')
 ax.fig.set_size_inches(12, 12)
 
 pairs.loc[:, 's_class'] = pd.Categorical((2*pairs.log_s + 0.5).astype('int'), ordered=True)
@@ -721,3 +795,5 @@ dfx2=dfx2.set_axis(['pc', 'S', 'ErrX', 'ErrY'], axis=1, inplace=False)
 dfx2.to_csv('SFdata//Car2.csv',mode = 'w', index=False)
 
 print("--- %s seconds ---" % (time.time()-start_time))
+
+

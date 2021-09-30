@@ -25,7 +25,7 @@ import seaborn as sns
 import math
 import sys
 import os
-from sabreMod import sosf,sosfh
+#from sabreMod import sosf,sosfh
 from scipy import interpolate
 
 plt.rcParams["font.family"]="Times New Roman"
@@ -37,13 +37,17 @@ start=time.time()
 orion=pd.read_table('Obs/Orion.csv', delimiter=',')
 orion.describe()
 
-# orion[orion == 0] = 'nan' 
-# orion
+orion
+
+orion[orion == 0] = np.nan 
+orion
+
+
 
 # +
 fig, ax = plt.subplots()
-sns.heatmap(orion,cmap="viridis",cbar_kws={'label': 'km/s'})
-plt.scatter(13.5, 13.5, marker='+', color='yellow', s=150)
+sns.heatmap(orion,cmap='RdBu_r', vmin=-8, vmax=8, cbar_kws={'label': 'km/s'})
+plt.scatter(13.5, 13.5, marker='+', color='k', s=150)
 ax.set(xlabel='arcmin', ylabel='arcmin')
 
 ax.text(0.93, 0.81, '1.3 pc',
@@ -53,17 +57,32 @@ ax.text(0.93, 0.81, '1.3 pc',
     
 plt.axhline(y=2, xmin=0.68, xmax=0.96, linewidth=2, color = 'k')
 
-plt.text(14.5, 14.5, '$θ^{1}Ori\ C$', fontsize=20, color='yellow')
+plt.text(14.5, 14.5, '$θ^{1}Ori\ C$', fontsize=20, color='k')
 
 plt.show()
 # -
 
+plt.style.use([
+    "seaborn-poster",
+])
+fig, ax = plt.subplots(figsize=(10, 8))
+sns.heatmap(orion,cmap='RdBu_r', vmin=-9, vmax=7, cbar_kws={'label': 'km/s'})
+plt.scatter(13.5, 13.5, marker='+', color='k', s=150)
+ax.set(xlabel='arcmin', ylabel='arcmin')
+ax.set_aspect("equal")
+plt.show()
+
 df=orion.stack().reset_index().rename(columns={'level_0':'RAdeg', 'level_1':'DEdeg', 0:'RVHalpha'})
-df.describe()
+#df.describe()
+df
 
 df.RAdeg=1.0*df.RAdeg
 
 df.DEdeg=pd.to_numeric(df.DEdeg)*1.0
+
+df
+
+
 
 # Structure Function
 
@@ -120,7 +139,8 @@ pairs.loc[:, 'dV2'] = pairs.dV**2
 pairs.loc[:, 'log_dV2'] = np.log10(pairs.dV**2)
 pairs.loc[:, 'VV_mean'] = 0.5*(pairs.V + pairs.V_)
 
-pairs = pairs[(pairs.dDE > 0.0) & (pairs.dRA > 0.0)]
+#pairs = pairs[(pairs.dDE > 0.0)]
+pairs = pairs[(pairs.dRA > 0.0)]
 pairs.head()
 
 pairs.describe()
@@ -128,12 +148,18 @@ pairs.describe()
 pairs.corr()
 
 mask = (pairs.log_s > 0) & (pairs.log_dV2 > -4)
-ax = sns.jointplot(x='log_s', y='dV', data=pairs[mask], alpha=0.2, s=100, edgecolor='none',color="blue")
+ax = sns.jointplot(x='log_s', y='dV', data=pairs[mask], alpha=0.1, s=5, edgecolor='none',color="blue")
 ax.fig.set_size_inches(12, 12)
 
+# +
 mask = (pairs.log_s > 0) & (pairs.log_dV2 > -4)
-ax = sns.jointplot(x='log_s', y='log_dV2', data=pairs[mask], alpha=0.2, s=100, edgecolor='none', color="blue", xlim=[0.05, 2.26])
-ax.fig.set_size_inches(12, 12)
+g = sns.jointplot(x='log_s', y='log_dV2', data=pairs[mask], alpha=0.1, s=10, edgecolor='none', color="blue", xlim=[0.05, 2.26])
+g.fig.set_size_inches(12, 12)
+
+g.ax_joint.set(
+    xlim=[None, 1.5],
+)
+# -
 
 pairs.loc[:, 's_class'] = pd.Categorical((2*pairs.log_s + 0.1).astype('int'), ordered=True)
 pairs.s_class[pairs.s_class == 0] = 1
@@ -198,9 +224,9 @@ ils = ((pairs["log_s"] - log_s_min) / d_log_s).astype(int).rename("ils")
 ils[ils < 0] = 0
 ils
 
+# -
 
 
-# +
 table = pairs[['s', 'dV2']].groupby(ils).describe()
 fig, ax = plt.subplots(figsize=(8, 6))
 s = 0.5 * (table[('s', 'min')] + table[('s', 'max')])
@@ -217,9 +243,6 @@ ax.set(xscale='log', yscale='log',
        ylabel=r'$b^2,\ \mathrm{km^2\ s^{-2}}$'
       )
 None
-
-
-# -
 
 b2
 

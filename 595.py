@@ -40,7 +40,7 @@ import turbustat.statistics as tss
 #import os
 #from PIL import Image
 
-from sabreMod import sosf
+#from sabreMod import sosf
 import strucfunc
 # -
 
@@ -111,7 +111,7 @@ data=data[mI]
 sns.pairplot(data, 
              vars=["I","RV","Sig"], 
              diag_kind='hist',  
-             plot_kws=dict(alpha=0.3, s=10, edgecolor='none', color="green"),
+             plot_kws=dict(alpha=0.02, s=10, edgecolor='none', color="green"),
              diag_kws=dict(bins=20, color="green"),
             )
 
@@ -123,7 +123,7 @@ data.describe()
 data.sem()
 
 datal=data.copy()
-#datal.I=np.log10(datal.I)
+datal.I=np.log10(datal.I)
 datal.X=datal.X.astype(int)
 dataH_f=(datal.round(2)).pivot(index='Y', columns='X', values='I')
 sns.heatmap(dataH_f, cmap="inferno",xticklabels='auto',cbar_kws={'label': 'Flux'})
@@ -138,7 +138,7 @@ ax = fig.add_subplot()
 datal=data.copy()
 
 dataH_rv=(datal.round(2)).pivot(index='Y', columns='X', values='RV')
-sns.heatmap(dataH_rv, cmap="viridis",cbar_kws={'label': 'km/s'})
+sns.heatmap(dataH_rv, cmap="RdBu_r",cbar_kws={'label': 'km/s'})
 plt.gca().invert_yaxis()
 plt.gca().invert_xaxis()
 
@@ -152,6 +152,22 @@ ax.text(0.28, 0.14, '60 pc',
         color='black', fontsize=20)
 
 # -
+
+plt.style.use([
+    "seaborn-poster",
+])
+fig = plt.figure(figsize=(8, 6))
+ax = fig.add_subplot()
+sns.heatmap(
+    dataH_rv,
+    vmin=-20, 
+    vmax=20,
+    cmap="RdBu_r",
+    cbar_kws={'label': 'km/s'},
+)
+ax.invert_yaxis()
+ax.invert_xaxis()
+ax.set_aspect("equal");
 
 datal=data.copy()
 dataH_s=(datal.round(2)).pivot(index='Y', columns='X', values='Sig')

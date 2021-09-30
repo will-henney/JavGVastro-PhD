@@ -136,7 +136,6 @@ result2 = model02.fit(
     r=r, r0=r0, m=m, s0=s0, noise=1/10,
 )
 
-# +
 fig, _ = result2.plot()
 fig.axes[0].set(
     xscale="log",
@@ -146,9 +145,6 @@ fig.axes[1].set(
     xscale="log",
     yscale="log",
 );
-
-
-# -
 
 print(result2.fit_report())
 

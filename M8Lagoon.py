@@ -144,7 +144,7 @@ pairs.loc[:, 'dV2'] = pairs.dV**2
 pairs.loc[:, 'log_dV2'] = np.log10(pairs.dV**2)
 pairs.loc[:, 'VV_mean'] = 0.5*(pairs.V + pairs.V_)
 
-pairs = pairs[(pairs.dDE > 0.0) & (pairs.dRA > 0.0)]
+pairs = pairs[(pairs.dDE > 0.0)] # & (pairs.dRA > 0.0)]
 
 pairs.head()
 
@@ -154,13 +154,13 @@ pairs.corr()
 
 # +
 mask = (pairs.log_s > 0.0) & (pairs.log_dV2 > -3)
-ax = sns.jointplot(x='log_s', y='dV', data=pairs[mask], alpha=0.2, s=1, edgecolor='none',color="blue")
+ax = sns.jointplot(x='log_s', y='dV', data=pairs[mask], alpha=0.03, s=1, edgecolor='none',color="blue")
 
 ax.fig.set_size_inches(12, 12)
 # -
 
 mask = (pairs.log_s > 0.0) & (pairs.log_dV2 > -3)
-ax = sns.jointplot(x='log_s', y='log_dV2', data=pairs[mask], alpha=0.2, s=1, edgecolor='none',color="blue")
+ax = sns.jointplot(x='log_s', y='log_dV2', data=pairs[mask], alpha=0.03, s=1, edgecolor='none',color="blue")
 ax.fig.set_size_inches(12, 12)
 
 pairs.loc[:, 's_class'] = pd.Categorical((2*pairs.log_s + 0.5).astype('int'), ordered=True)
@@ -277,12 +277,13 @@ def mark_points(ax):
         ax.plot(c[0], c[1], marker='+', markersize='12', color='k')
 
 
+
 # +
 with sns.axes_style("darkgrid"):
     fig, ax = plt.subplots(figsize=(12, 6))
     scat = ax.scatter(df.RAdeg, df.DEdeg, 
-                      s=0.0015*((df.NormHalpha)), 
-                      c=df.RVHalpha,cmap="viridis" 
+                      s=0.0005*((df.NormHalpha)), 
+                      c=df.RVHalpha, cmap='RdBu_r',
                      )
     fig.colorbar(scat, ax=[ax])
     #mark_points(ax)
@@ -309,6 +310,26 @@ for i, type_ in enumerate(types):
     plt.scatter(x, y, marker='+', color='yellow')
     plt.text(x, y, type_, fontsize=14)
 # -
+
+with sns.axes_style("white"):
+    fig, ax = plt.subplots(figsize=(12, 6))
+    scat = ax.scatter(df.RAdeg, df.DEdeg, 
+                      s=60, 
+                      c=df.RVHalpha, cmap='RdBu_r',
+                      vmin=-12, vmax=2,
+                     )
+    fig.colorbar(scat, ax=[ax])
+    #mark_points(ax)
+    #ax.set_facecolor('k')
+    #ax.axis('equal')
+    ax.set_aspect('equal', 'datalim')
+    fig.colorbar(scat, ax=ax).set_label("km/s")
+
+    ax.invert_xaxis()
+   
+    plt.axhline(y=-24.65, xmin=0.725, xmax=0.905, linewidth=2, color = 'k')
+
+    ax.set(xlabel='R.A.', ylabel='Dec')
 
 with sns.axes_style("darkgrid"):
     fig, ax = plt.subplots(figsize=(12, 6))

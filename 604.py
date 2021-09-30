@@ -41,7 +41,7 @@ import statsmodels.api as sm
 #import os
 #from PIL import Image
 
-from sabreMod import sosf
+#from sabreMod import sosf
 import strucfunc
 # -
 
@@ -113,7 +113,7 @@ data=data[mI]
 sns.pairplot(data, 
              vars=["I","RV","Sig"], 
              diag_kind='hist',  
-             plot_kws=dict(alpha=0.3, s=10, edgecolor='none',color='green'),
+             plot_kws=dict(alpha=0.01, s=10, edgecolor='none',color='green'),
              diag_kws=dict(bins=20, color="green"),
             )
 
@@ -122,7 +122,7 @@ data.describe()
 data.sem()
 
 datal=data.copy()
-#datal.I=np.log10(datal.I)
+datal.I=np.log10(datal.I)
 datal.X=datal.X.astype(int)
 dataH_f=(datal.round(2)).pivot(index='X', columns='Y', values='I')
 sns.heatmap(dataH_f, cmap="inferno",xticklabels='auto',cbar_kws={'label': 'Flux'})
@@ -136,7 +136,7 @@ ax = fig.add_subplot()
 datal=data.copy()
 
 dataH_rv=(datal.round(2)).pivot(index='X', columns='Y', values='RV')
-sns.heatmap(dataH_rv, cmap="viridis",cbar_kws={'label': 'km/s'})
+sns.heatmap(dataH_rv, cmap="RdBu_r",cbar_kws={'label': 'km/s'})
 plt.title('NGC 604')
 
 plt.axhline(y=20, xmin=0.05, xmax=0.39, linewidth=2, color = 'k')
@@ -147,6 +147,19 @@ ax.text(0.32, 0.9, '60 pc',
         color='black', fontsize=20)
 
 # -
+
+plt.style.use([
+    "seaborn-poster",
+])
+fig = plt.figure(figsize=(8, 6))
+ax = fig.add_subplot()
+sns.heatmap(
+    dataH_rv,
+    vmin=-12, 
+    vmax=28,
+    cmap="RdBu_r",
+    cbar_kws={'label': 'km/s'},
+);
 
 datal=data.copy()
 dataH_s=(datal.round(2)).pivot(index='X', columns='Y', values='Sig')

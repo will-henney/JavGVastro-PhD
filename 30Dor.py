@@ -41,11 +41,14 @@ ss = hdulist[3].data[:n, :n].astype(np.float64)
 fig, ax = plt.subplots()
 
 
-dataRV=hdulist[2].data
+dataRV = hdulist[2].data - np.nanmean(hdulist[2].data)
+
+#dataRV -= np.median(dataRV)
+
 plt.figure(1)
-plt.imshow(dataRV, cmap='viridis')
+plt.imshow(dataRV, cmap='RdBu_r')
 cbar = plt.colorbar()
-plt.clim(225,350)
+plt.clim(-40, 40)
 cbar.set_label('km/s', rotation=270, labelpad=15)  
 
 ax.set_xlabel('X')
@@ -61,6 +64,20 @@ plt.axhline(y=50, xmin=0.59, xmax=0.925, linewidth=2, color = 'k')
 
 
 plt.gca().invert_yaxis()
+
+# +
+plt.style.use([
+    "seaborn-poster",
+])
+fig, ax = plt.subplots(figsize=(8, 6))
+im = ax.imshow(dataRV, cmap='RdBu_r', vmin=-40, vmax=40)
+cb = fig.colorbar(im)
+cb.set_label('km/s', rotation=270, labelpad=15)  
+
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+
+ax.invert_yaxis()
 # -
 
 sb

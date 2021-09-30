@@ -90,6 +90,9 @@ B=DataO[5].S[0:6]
 r=DataO[5].pc[0:6]
 # -
 
+r = pd.Series([0.06]).append(r)
+B = pd.Series([2.12**2]).append(B)
+
 model02 = lmfit.Model(bfunc02)
 model02.param_names
 
@@ -111,7 +114,6 @@ result2 = model02.fit(
     r=r, r0=r0, m=m, s0=s0, noise=1/10,
 )
 
-# +
 fig, _ = result2.plot()
 fig.axes[0].set(
     xscale="log",
@@ -121,9 +123,6 @@ fig.axes[1].set(
     xscale="log",
     yscale="log",
 );
-
-
-# -
 
 print(result2.fit_report())
 
@@ -140,8 +139,8 @@ plt.style.use([
 plot_limits = {
     "s0": [0.0, 1],
     "m": [0.0, 3.0],
-    "r0": [0.0, 8.0],
-    "noise": [0.0, 2.0],
+    "r0": [0.0, 3.0],
+    "noise": [0.0, 10.0],
 }
 
 # +
@@ -158,7 +157,7 @@ for ax, [xvar, yvar] in zip(axes.flat, [
     ["r0", "s0"],
 ]):
     cx, cy, grid = lmfit.conf_interval2d(
-        result2, result2, xvar, yvar, 30, 30,
+        result2, result2, xvar, yvar, 10, 10,
         limits=[plot_limits[xvar], plot_limits[yvar]],
     )
     ctp = ax.contour(cx, cy, grid, levels, colors=colors)
@@ -169,3 +168,7 @@ fig.tight_layout();
 # -
 
 print("--- %s seconds ---" % (time.time()-start_time))
+
+
+
+

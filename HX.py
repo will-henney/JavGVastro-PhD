@@ -27,7 +27,7 @@ import os
 from PIL import Image
 import seaborn as sns
 from scipy import interpolate
-from sabreMod import sosf,sosfn
+#from sabreMod import sosf,sosfn
 import json
 import strucfunc
 import turbustat.statistics as tss
@@ -62,7 +62,7 @@ FitsFile= FitsFile= 'Obs/TAURUS.HX.Ha.RV'
 hdul=fits.open(FitsFile + '.fits')
 #IMAGEN
 image_data=hdul[0].data
-plt.imshow(image_data, cmap='viridis')
+plt.imshow(image_data, cmap='RdBu_r')
 ax.set_xlabel('X coordintate')
 ax.set_ylabel('Y coordintate')
 cbar = plt.colorbar()
@@ -111,7 +111,7 @@ data.describe()
 data.sem()
 
 datal=data.copy()
-#datal.I=np.log10(datal.I)
+datal.I=np.log10(datal.I)
 datal.X=datal.X.astype(int)
 dataH_f=(datal.round(2)).pivot(index='Y', columns='X', values='I')
 #fig, ax = plt.subplots(figsize=(17, 4))
@@ -126,7 +126,7 @@ ax = fig.add_subplot()
 datal=data.copy()
 
 dataH_rv=(datal.round(2)).pivot(index='Y', columns='X', values='RV')
-sns.heatmap(dataH_rv, cmap="viridis",cbar_kws={'label': 'km/s'})
+sns.heatmap(dataH_rv, cmap="RdBu_r",cbar_kws={'label': 'km/s'})
 
 plt.title('Hubble X')
 
@@ -138,7 +138,20 @@ ax.text(0.84, 0.14, '20 pc',
         color='black', fontsize=20)
 #plt.savefig('TAURUS/Imgs/A/'+reg+'RVH.png')
 # -
-
+plt.style.use([
+    "seaborn-poster",
+])
+fig, ax = plt.subplots(figsize=(8, 10))
+sns.heatmap(
+    np.where(
+        dataH_f > 0.0,
+        dataH_rv, 
+        np.nan,
+    ),
+    vmin=-15, vmax=5,
+    cmap="RdBu_r",cbar_kws={'label': 'km/s'})
+ax.set_aspect("equal");
+#plt.savefig('TAURUS/Imgs/A/'+reg+'RVH.png')
 
 
 

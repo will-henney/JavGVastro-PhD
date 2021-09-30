@@ -112,12 +112,11 @@ for p in model02.param_names:
 model02.print_param_hints()
 
 result2 = model02.fit(
-    B, 
-    weights=weights,
-    r=r, r0=r0, m=m, s0=s0, noise=1/10, sig2=sig2
+    B[:-2], 
+    weights=weights[:-2],
+    r=r[:-2], r0=r0, m=m, s0=s0, noise=1/10, sig2=sig2
 )
 
-# +
 fig, _ = result2.plot()
 fig.axes[0].set(
     xscale="log",
@@ -128,13 +127,12 @@ fig.axes[1].set(
     yscale="log",
 );
 
-
-# -
-
 print(result2.fit_report())
 
-for p in result2.model.param_names:
-    result2.params[p].stderr = result2.params[p].value * 0.1
+# +
+#for p in result2.model.param_names:
+#    result2.params[p].stderr = result2.params[p].value * 0.1
+# -
 
 result2.conf_interval()
 print(result2.ci_report())
@@ -144,10 +142,11 @@ plt.style.use([
 ])
 
 plot_limits = {
-    "s0": [0.0, 0.5],
+    "s0": [0.0, 0.3],
     "m": [0.5, 2.5],
     "r0": [0.5, 5.0],
     "noise": [0.0, 2.0],
+    "sig2": [3.0, 14.0],
 }
 
 # +
@@ -164,7 +163,7 @@ for ax, [xvar, yvar] in zip(axes.flat, [
     ["r0", "s0"],
 ]):
     cx, cy, grid = lmfit.conf_interval2d(
-        result2, result2, xvar, yvar, 30, 30,
+        result2, result2, xvar, yvar, 10, 10,
         limits=[plot_limits[xvar], plot_limits[yvar]],
     )
     ctp = ax.contour(cx, cy, grid, levels, colors=colors)
@@ -172,6 +171,27 @@ for ax, [xvar, yvar] in zip(axes.flat, [
     ax.set_ylabel(yvar)
 
 fig.tight_layout();
+
+# +
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+plt.title('M8')
+levels = [0.6827, 0.9545, 0.9973]
+colors = ["g", "y", "r"]
+
+for ax, [xvar, yvar] in zip(axes.flat, [
+    ["r0", "sig2"],
+    ["m", "sig2"],
+]):
+    cx, cy, grid = lmfit.conf_interval2d(
+        result2, result2, xvar, yvar, 20, 20,
+        limits=[plot_limits[xvar], plot_limits[yvar]],
+    )
+    ctp = ax.contour(cx, cy, grid, levels, colors=colors)
+    ax.set_xlabel(xvar)
+    ax.set_ylabel(yvar)
 # -
 
 print("--- %s seconds ---" % (time.time()-start_time))
+
+

@@ -164,8 +164,9 @@ plt.style.use([
 plot_limits = {
     "s0": [0.0, 0.3],
     "m": [0.1, 3],
-    "r0": [0.1, 5.0],
-    "noise": [0.0, 2.0],
+    "r0": [0.1, 3.0],
+    "noise": [0.0, 8.0],
+    "sig2": [10.0, 25.0],
 }
 
 # +
@@ -182,7 +183,7 @@ for ax, [xvar, yvar] in zip(axes.flat, [
     ["r0", "s0"],
 ]):
     cx, cy, grid = lmfit.conf_interval2d(
-        result2, result2, xvar, yvar, 30, 30,
+        result2, result2, xvar, yvar, 10, 10,
         limits=[plot_limits[xvar], plot_limits[yvar]],
     )
     ctp = ax.contour(cx, cy, grid, levels, colors=colors)
@@ -190,6 +191,25 @@ for ax, [xvar, yvar] in zip(axes.flat, [
     ax.set_ylabel(yvar)
 
 fig.tight_layout();
+
+# +
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+plt.title('M8')
+levels = [0.6827, 0.9545, 0.9973]
+colors = ["g", "y", "r"]
+
+for ax, [xvar, yvar] in zip(axes.flat, [
+    ["r0", "sig2"],
+    ["m", "sig2"],
+]):
+    cx, cy, grid = lmfit.conf_interval2d(
+        result2, result2, xvar, yvar, 20, 20,
+        limits=[plot_limits[xvar], plot_limits[yvar]],
+    )
+    ctp = ax.contour(cx, cy, grid, levels, colors=colors)
+    ax.set_xlabel(xvar)
+    ax.set_ylabel(yvar)
 # -
 
 x=r
